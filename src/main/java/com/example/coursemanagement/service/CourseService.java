@@ -1,50 +1,57 @@
 package com.example.coursemanagement.service;
 
+import com.example.coursemanagement.dto.request.CourseCreateRequest;
+import com.example.coursemanagement.dto.request.CourseUpdateRequest;
 import com.example.coursemanagement.model.Course;
+import com.example.coursemanagement.model.Instructor;
 import com.example.coursemanagement.repository.CourseRepository;
+import com.example.coursemanagement.repository.InstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final InstructorRepository instructorRepository;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(
+            CourseRepository courseRepository,
+            InstructorRepository instructorRepository) {
+
         this.courseRepository = courseRepository;
+        this.instructorRepository = instructorRepository;
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
-    }
+    public Course createCourse(CourseCreateRequest req) {
 
-    public Course findCourseById(long id) {
-        return courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-    }
+        Instructor instructor = instructorRepository
+                .findById(req.getInstructorId())
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-    public Course createCourse(Course course) {
+        Course course = new Course();
+        course.setTitle(req.getTitle());
+        course.setStatus(req.getStatus());
+        course.setInstructor(instructor);
+
         return courseRepository.save(course);
     }
 
-    public Course updateCourse(long id, Course updatedCourse) {
-        Course existingCourse = courseRepository.findById(id)
+    public Course updateCourse(Long id, CourseUpdateRequest req) {
+
+        Course course = courseRepository
+                .findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        existingCourse.setTitle(updatedCourse.getTitle());
-        existingCourse.setStatus(updatedCourse.getStatus());
-        existingCourse.setInstructor(updatedCourse.getInstructor());
+        Instructor instructor = instructorRepository
+                .findById(req.getInstructorId())
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-        return courseRepository.save(existingCourse);
-    }
+        course.setTitle(req.getTitle());
+        course.setStatus(req.getStatus());
+        course.setInstructor(instructor);
 
-    public void deleteCourseById(long id) {
-        Course existingCourse = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-
-        courseRepository.delete(existingCourse);
+        return courseRepository.save(course);
     }
 }
