@@ -1,10 +1,10 @@
 package com.example.coursemanagement.repository;
 
-import com.example.coursemanagement.model.Instructor;
+import com.example.coursemanagement.model.StudentEnrollment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface InstructorRepository
-        extends JpaRepository<Instructor, Long> {
+public interface StudentEnrollmentRepository
+        extends JpaRepository<StudentEnrollment, Long> {
 }

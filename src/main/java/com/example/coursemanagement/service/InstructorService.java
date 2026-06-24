@@ -1,5 +1,6 @@
 package com.example.coursemanagement.service;
 
+import com.example.coursemanagement.dto.request.InstructorCreateRequest;
 import com.example.coursemanagement.model.Instructor;
 import com.example.coursemanagement.repository.InstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +20,20 @@ public class InstructorService {
         this.instructorRepository = instructorRepository;
     }
 
-    public List<Instructor> getAllInstructors() {
+    public List<Instructor> findAllInstructors() {
         return instructorRepository.findAll();
     }
 
-    public Instructor getInstructorById(int id) {
-        return instructorRepository.findById(id);
+    public Instructor findInstructorById(Long id) {
+        return instructorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
     }
 
-    public Instructor createInstructor(Instructor instructor) {
-        return instructorRepository.create(instructor);
-    }
+    public Instructor createInstructor(InstructorCreateRequest req) {
+        Instructor instructor = new Instructor();
+        instructor.setName(req.getName());
+        instructor.setEmail(req.getEmail());
 
-    public Instructor updateInstructor(
-            int id,
-            Instructor updatedInstructor) {
-
-        return instructorRepository.update(id, updatedInstructor);
-    }
-
-    public Instructor deleteInstructorById(int id) {
-
-        return instructorRepository.deleteById(id);
+        return instructorRepository.save(instructor);
     }
 }

@@ -27,14 +27,24 @@ public class CourseService {
     }
 
     public Course createCourse(Course course) {
-        return courseRepository.create(course);
+        return courseRepository.save(course);
     }
 
     public Course updateCourse(long id, Course updatedCourse) {
-        return courseRepository.update(id, updatedCourse);
+        Course existingCourse = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        existingCourse.setTitle(updatedCourse.getTitle());
+        existingCourse.setStatus(updatedCourse.getStatus());
+        existingCourse.setInstructor(updatedCourse.getInstructor());
+
+        return courseRepository.save(existingCourse);
     }
 
-    public Course deleteCourseById(long id) {
-        return courseRepository.deleteById(id);
+    public void deleteCourseById(long id) {
+        Course existingCourse = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        courseRepository.delete(existingCourse);
     }
 }
