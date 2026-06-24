@@ -2,6 +2,7 @@ package com.example.coursemanagement.repository;
 
 import com.example.coursemanagement.model.Course;
 import com.example.coursemanagement.model.CourseStatus;
+import com.example.coursemanagement.model.Instructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,17 +15,25 @@ public class CourseRepository {
     private final List<Course> courses = new ArrayList<>();
 
     public CourseRepository() {
+        Instructor instructor1 = new Instructor();
+        instructor1.setId(1L);
+
         courses.add(
-                new Course(1L,
+                new Course(
+                        1L,
                         "Java Spring Boot",
                         CourseStatus.OPEN,
-                        1L)
+                        instructor1
+                )
         );
+
+        Instructor instructor2 = new Instructor();
+        instructor1.setId(2L);
         new Course(
                 2L,
                 "Web Development",
                 CourseStatus.CLOSED,
-                2L
+                instructor2
         );
     }
 
@@ -47,13 +56,23 @@ public class CourseRepository {
         return course;
     }
 
-    public Course update(long id, Course updatedCourse) {
-        Course existingCourse = findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+    public Course update(Long id, Course updatedCourse) {
 
-        existingCourse.setTitle(updatedCourse.getTitle());
-        existingCourse.setStatus(updatedCourse.getStatus());
-        existingCourse.setInstructorId(updatedCourse.getInstructorId());
+        Course existingCourse = findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Course not found"));
+
+        existingCourse.setTitle(
+                updatedCourse.getTitle()
+        );
+
+        existingCourse.setStatus(
+                updatedCourse.getStatus()
+        );
+
+        existingCourse.setInstructor(
+                updatedCourse.getInstructor()
+        );
 
         return existingCourse;
     }

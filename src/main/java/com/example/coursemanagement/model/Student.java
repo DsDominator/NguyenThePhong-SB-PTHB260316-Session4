@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "instructors")
-public class Instructor {
+@Table(name = "students")
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +22,13 @@ public class Instructor {
     private String email;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "instructor")
-    private List<Course> courses = new ArrayList<>();
+    @OneToMany(mappedBy = "student")
+    private List<StudentEnrollment> enrollments = new ArrayList<>();
 
-    public Instructor() {
+    public Student() {
     }
 
-    public Instructor(Long id, String name, String email) {
+    public Student(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -46,8 +46,8 @@ public class Instructor {
         return email;
     }
 
-    public List<Course> getCourses() {
-        return courses;
+    public List<StudentEnrollment> getEnrollments() {
+        return enrollments;
     }
 
     public void setId(Long id) {
@@ -62,7 +62,7 @@ public class Instructor {
         this.email = email;
     }
 
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
+    public void setEnrollments(List<StudentEnrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 }
